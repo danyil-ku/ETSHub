@@ -16,8 +16,7 @@ builder.WebHost.ConfigureKestrel(options =>
     options.Listen(IPAddress.Any, port);
 });
 
-// register services
-// Если запускаемся на Windows — используем настоящий vJoy, иначе тестовый Mock
+// Register joystick service: use real VJoy on Windows, otherwise fallback to Mock
 if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
 {
     builder.Services.AddSingleton<IJoystickService, VJoyService>();
@@ -30,14 +29,15 @@ else
 
 var app = builder.Build();
 
-// configure web for static files and websocket
+// Configure static files (HTML, CSS, JS from wwwroot) and WebSockets
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseWebSockets();
 
-// get joystick service
+// Get joystick service from dependency injection container
 var joystick = app.Services.GetRequiredService<IJoystickService>();
 
+// WebSocket route for incoming iPad controller commands
 app.Map("/ws", async context => 
 {
 
@@ -82,6 +82,7 @@ app.Map("/ws", async context =>
     }
 });
 
+// Resolve local IP and print QR code for easy iPad pairing
 string localIp = GetLocalIpAddress();
 string serverUrl = $"http://{localIp}:{port}";
 
@@ -89,6 +90,7 @@ PrintQrCode(serverUrl);
 
 app.Run();
 
+// Helper method to find primary local IPv4 address
 static string GetLocalIpAddress()
 {
     try {
@@ -103,6 +105,8 @@ static string GetLocalIpAddress()
         return "127.0.0.1";
     }
 }
+
+// Helper method to print ASCII QR code in terminal
 
 static void PrintQrCode(string url) {
     Console.WriteLine("\n===================================");

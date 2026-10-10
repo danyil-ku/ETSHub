@@ -1,5 +1,8 @@
 namespace ETSHub.Server.Services;
 
+/// <summary>
+/// Mock joystick implementation for testing and development
+/// </summary>
 public class MockJoystickService : IJoystickService
 {
     public void SetButton(int buttonId, bool isPressed)
@@ -7,5 +10,4 @@ public class MockJoystickService : IJoystickService
         string status = isPressed ? "pressed" : "released";
         Console.WriteLine($"[MOCK JOYSTICK] Button {buttonId} -> {status}");
     }
-
 }

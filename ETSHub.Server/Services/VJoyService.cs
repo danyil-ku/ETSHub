@@ -2,11 +2,14 @@ using System.Runtime.InteropServices;
 
 namespace ETSHub.Server.Services;
 
+/// <summary>
+/// Real vJoy driver service for Windows
+/// </summary>
 public class VJoyService : IJoystickService
 {
     private const uint DeviceId = 1;
 
-    // Импорт функций из системной библиотеки vJoyInterface.dll
+    // Import native functions from vJoyInterface.dll
     [DllImport("vJoyInterface.dll", EntryPoint = "AcquireVJD")]
     private static extern bool AcquireVJD(uint rID);
 
@@ -23,11 +26,11 @@ public class VJoyService : IJoystickService
             bool acquired = AcquireVJD(DeviceId);
             if (acquired)
             {
-                Console.WriteLine($"[vJoy] Устройство #{DeviceId} успешно захвачено!");
+                Console.WriteLine($"[vJoy] Device #{DeviceId} successfully acquired!");
             }
             else
             {
-                Console.WriteLine($"⚠️ [vJoy] Не удалось захватить устройство #{DeviceId}. Проверьте Configure vJoy.");
+                Console.WriteLine($"⚠️ [vJoy] Failed to acquire device #{DeviceId}. Please verify Configure vJoy.");
             }
         }
     }
@@ -36,7 +39,7 @@ public class VJoyService : IJoystickService
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            // Устанавливаем кнопку в vJoy: true = нажата, false = отпущена
+            // Set vJoy button state: true = pressed, false = released
             SetBtn(isPressed, DeviceId, (byte)buttonId);
         }
 
