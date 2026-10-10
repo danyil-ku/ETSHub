@@ -1,0 +1,12 @@
+## .NET build artifacts
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
