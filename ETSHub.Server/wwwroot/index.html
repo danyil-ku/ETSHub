@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>ETSHub Controller</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <header class="top-bar">
+        <h1 class="logo">ETSHub <span>Control Panel</span></h1>
+        <div id="status" class="status-badge disconnected">● Отключено</div>
+    </header>
+
+    <main class="dashboard-grid">
+        <!-- Кнопка 1: Зажигание / Старт двигателя -->
+        <button class="btn btn-primary" data-button="1">
+            <span class="icon">🔑</span>
+            <span class="label">Зажигание</span>
+        </button>
+
+        <!-- Кнопка 2: Стояночный тормоз (Ручник) -->
+        <button class="btn btn-danger" data-button="2">
+            <span class="icon">🅿️</span>
+            <span class="label">Ручник</span>
+        </button>
+
+        <!-- Кнопка 3: Аварийная сигнализация -->
+        <button class="btn btn-warning" data-button="3">
+            <span class="icon">⚠️</span>
+            <span class="label">Аварийка</span>
+        </button>
+
+        <!-- Кнопка 4: Ближний / Дальний свет -->
+        <button class="btn" data-button="4">
+            <span class="icon">💡</span>
+            <span class="label">Свет</span>
+        </button>
+
+        <!-- Кнопки 5 и 6: Поворотники -->
+        <button class="btn" data-button="5">
+            <span class="icon">⬅️</span>
+            <span class="label">Левый пов.</span>
+        </button>
+
+        <button class="btn" data-button="6">
+            <span class="icon">➡️</span>
+            <span class="label">Правый пов.</span>
+        </button>
+
+        <!-- Кнопка 7: Подъемная ось (Ленивец) -->
+        <button class="btn" data-button="7">
+            <span class="icon">🛞</span>
+            <span class="label">Подъём оси</span>
+        </button>
+
+        <!-- Кнопка 8: Блокировка дифференциала -->
+        <button class="btn" data-button="8">
+            <span class="icon">⚙️</span>
+            <span class="label">Дифференциал</span>
+        </button>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
