@@ -1,71 +1,71 @@
-// Находим статусную плашку
+// DOM elements
 const statusBadge = document.getElementById('status');
 
-// Автоматически формируем WebSocket URL на основе текущего хоста страницы
+// Build WebSocket URL from current host
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 const wsUrl = `${wsProtocol}//${location.host}/ws`;
 
 let socket = null;
 
-// Функция подключения к WebSocket
+// Connect to server WebSocket endpoint
 function connectWebSocket() {
     socket = new WebSocket(wsUrl);
 
     socket.onopen = () => {
-        console.log('✅ WebSocket подключен');
-        statusBadge.textContent = '● Подключено';
+        console.log('✅ WebSocket connected');
+        statusBadge.textContent = '● Connected';
         statusBadge.className = 'status-badge connected';
     };
 
     socket.onclose = () => {
-        console.warn('⚠️ Связь с сервером потеряна. Переподключение...');
-        statusBadge.textContent = '● Отключено';
+        console.warn('⚠️ Connection lost. Reconnecting...');
+        statusBadge.textContent = '● Disconnected';
         statusBadge.className = 'status-badge disconnected';
 
-        // Автоматическое переподключение через 1.5 секунды
+        // Auto-reconnect after 1.5 seconds
         setTimeout(connectWebSocket, 1500);
     };
 
     socket.onerror = (error) => {
-        console.error('Ошибка WebSocket:', error);
+        console.error('WebSocket error:', error);
         socket.close();
     };
 }
 
-// Отправка события нажатия кнопки на C#-сервер
+// Send button event packet to C# server
 function sendButtonEvent(buttonId, action) {
     if (socket && socket.readyState === WebSocket.OPEN) {
         const payload = JSON.stringify({
             button: parseInt(buttonId, 10),
-            action: action // "down" или "up"
+            action: action // "down" or "up"
         });
         socket.send(payload);
     }
 }
 
-// Навешиваем слушатели касаний на все кнопки с атрибутом data-button
+// Bind touch and pointer listeners for all buttons
 document.querySelectorAll('.btn[data-button]').forEach(button => {
     const buttonId = button.getAttribute('data-button');
 
-    // Нажатие на кнопку (пальцем или мышкой)
+    // Button pressed (touch down / mouse down)
     const handleDown = (event) => {
-        event.preventDefault(); // Отключаем системный зум и жесты iOS
+        event.preventDefault(); // Prevent iOS zoom and gesture conflicts
         button.classList.add('pressed');
         sendButtonEvent(buttonId, 'down');
     };
 
-    // Отпускание кнопки
+    // Button released (touch up / touch cancel)
     const handleUp = (event) => {
         event.preventDefault();
         button.classList.remove('pressed');
         sendButtonEvent(buttonId, 'up');
     };
 
-    // Используем Pointer Events (минимальная задержка на сенсорных экранах)
+    // Attach Pointer Events for lowest touch latency
     button.addEventListener('pointerdown', handleDown);
     button.addEventListener('pointerup', handleUp);
     button.addEventListener('pointercancel', handleUp);
 });
 
-// Запускаем подключение при загрузке страницы
+// Initialize connection on page load
 connectWebSocket();

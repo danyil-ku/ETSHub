@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+    <!-- PWA meta tags: fullscreen web app mode on iPad without Safari UI -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>ETSHub Controller</title>
@@ -15,55 +16,58 @@
 
     <header class="top-bar">
         <h1 class="logo">ETSHub <span>Control Panel</span></h1>
-        <div id="status" class="status-badge disconnected">● Отключено</div>
+        <div id="status" class="status-badge disconnected">● Disconnected</div>
     </header>
 
     <main class="dashboard-grid">
-        <!-- Кнопка 1: Зажигание / Старт двигателя -->
+        <!-- Button 1: Engine Start/Stop -->
         <button class="btn btn-primary" data-button="1">
-            <span class="icon">🔑</span>
-            <span class="label">Зажигание</span>
+            <img src="assets/engine.png" alt="Engine" class="btn-icon">
         </button>
 
-        <!-- Кнопка 2: Стояночный тормоз (Ручник) -->
-        <button class="btn btn-danger" data-button="2">
-            <span class="icon">🅿️</span>
-            <span class="label">Ручник</span>
+        <!-- Button 2: Vehicle Electrics / Ignition Switch -->
+        <button class="btn" data-button="2">
+            <img src="assets/EngineStart - Natural.svg" alt="Ignition" class="btn-icon">
         </button>
 
-        <!-- Кнопка 3: Аварийная сигнализация -->
+        <!-- Button 3: Hazard Warning Lights -->
         <button class="btn btn-warning" data-button="3">
-            <span class="icon">⚠️</span>
-            <span class="label">Аварийка</span>
+            <img src="assets/hazard copy.png" alt="Hazard" class="btn-icon">
         </button>
 
-        <!-- Кнопка 4: Ближний / Дальний свет -->
+        <!-- Button 4: Lane Keeping Assist -->
         <button class="btn" data-button="4">
-            <span class="icon">💡</span>
-            <span class="label">Свет</span>
+            <img src="assets/lane-keeping-1.png" alt="Lane Keeping" class="btn-icon">
         </button>
 
-        <!-- Кнопки 5 и 6: Поворотники -->
-        <button class="btn" data-button="5">
-            <span class="icon">⬅️</span>
-            <span class="label">Левый пов.</span>
+        <!-- Button 5: Warning Beacons -->
+        <button class="btn btn-warning" data-button="5">
+            <img src="assets/beacon.png" alt="Beacons" class="btn-icon">
         </button>
 
+        <!-- Button 6: Dashboard Map Zoom Mode -->
         <button class="btn" data-button="6">
-            <span class="icon">➡️</span>
-            <span class="label">Правый пов.</span>
+            <img src="assets/navi-zoom-mode.png" alt="Map Zoom" class="btn-icon">
         </button>
 
-        <!-- Кнопка 7: Подъемная ось (Ленивец) -->
+        <!-- Button 7: Truck Lift Axle -->
         <button class="btn" data-button="7">
-            <span class="icon">🛞</span>
-            <span class="label">Подъём оси</span>
+            <img src="assets/lift-axle-truck.png" alt="Lift Axle" class="btn-icon">
         </button>
 
-        <!-- Кнопка 8: Блокировка дифференциала -->
+        <!-- Button 8: Differential Lock -->
         <button class="btn" data-button="8">
-            <span class="icon">⚙️</span>
-            <span class="label">Дифференциал</span>
+            <img src="assets/diff-lock.png" alt="Diff Lock" class="btn-icon">
+        </button>
+
+        <!-- Button 9: World Map -->
+        <button class="btn" data-button="9">
+            <img src="assets/map.png" alt="Map" class="btn-icon">
+        </button>
+
+        <!-- Button 10: Trailer Coupling -->
+        <button class="btn" data-button="10">
+            <img src="assets/coupling.png" alt="Coupling" class="btn-icon">
         </button>
     </main>
 
