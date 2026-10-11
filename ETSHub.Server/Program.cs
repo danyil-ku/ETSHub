@@ -40,6 +40,10 @@ var joystick = app.Services.GetRequiredService<IJoystickService>();
 // WebSocket route for incoming iPad controller commands
 app.Map("/ws", async context => 
 {
+    // Application shutdown token — fires when Ctrl+C is pressed
+    var appStopping = context.RequestServices
+        .GetRequiredService<IHostApplicationLifetime>()
+        .ApplicationStopping;
 
     if (context.WebSockets.IsWebSocketRequest)
     {
@@ -48,19 +52,21 @@ app.Map("/ws", async context =>
 
         var buffer = new byte[1024 * 4];
 
-        while (webSocket.State == WebSocketState.Open)
+        try
         {
-            var result = await webSocket.ReceiveAsync(
-                new ArraySegment<byte>(buffer), CancellationToken.None);
+            while (webSocket.State == WebSocketState.Open && !appStopping.IsCancellationRequested)
+            {
+                var result = await webSocket.ReceiveAsync(
+                    new ArraySegment<byte>(buffer), appStopping);
 
                 if (result.MessageType == WebSocketMessageType.Close)
                 {
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure,
-                    "Closing", CancellationToken.None);
-                    
+                        "Closing", CancellationToken.None);
+
                     Console.WriteLine("[IPAD] is disconnected");
                     break;
-                } 
+                }
 
                 var messageJson = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
@@ -73,11 +79,22 @@ app.Map("/ws", async context =>
                 } catch (Exception ex)
                 {
                     Console.WriteLine($"Error parsing ButtonEvent: {ex.Message}");
-                }   
+                }
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Ctrl+C pressed — close the WebSocket cleanly before shutting down
+            if (webSocket.State == WebSocketState.Open)
+            {
+                await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure,
+                    "Server shutting down", CancellationToken.None);
+            }
+            Console.WriteLine("[IPAD] disconnected due to server shutdown");
         }
     }
-
-    else {
+    else
+    {
         context.Response.StatusCode = StatusCodes.Status400BadRequest;
     }
 });
